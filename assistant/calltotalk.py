@@ -509,15 +509,16 @@ def main(api_endpoint, credentials, project_id,
 
     # Configure audio source and sink.
     while 1:
-        print('Listening... Press Ctrl+C to exit')
-        g.output(26, g.HIGH)
+        if answer_mod == False:
+            print('Listening... Press Ctrl+C to exit')
+            g.output(26, g.HIGH)
 
-        # main loop
-        detector.start(detected_callback=snowboydecoder.play_audio_file,
-                       interrupt_check=interrupt_callback,
-                       sleep_time=0.03)
+            # main loop
+            detector.start(detected_callback=snowboydecoder.play_audio_file,
+                           interrupt_check=interrupt_callback,
+                           sleep_time=0.03)
 
-        detector.terminate()
+            detector.terminate()
 
         audio_device = None
         if input_audio_file:
