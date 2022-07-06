@@ -2,6 +2,7 @@
 
 import collections
 import pyaudio
+#from . import snowboydetect
 import snowboydetect
 import time
 import wave
@@ -52,6 +53,9 @@ class RingBuffer(object):
         tmp = bytes(bytearray(self._buf))
         self._buf.clear()
         return tmp
+
+def test():
+    pass
 
 
 def play_audio_file(fname=DETECT_DING):
@@ -164,8 +168,10 @@ class HotwordDetector(object):
             play_data = chr(0) * len(in_data)
             return play_data, pyaudio.paContinue
 
-        with no_alsa_error():
+        with no_alsa_error(): # 여기가 오류임
             self.audio = pyaudio.PyAudio()
+            
+        #여기부터 오류 없음
         self.stream_in = self.audio.open(
             input=True, output=False,
             format=self.audio.get_format_from_width(
@@ -192,16 +198,17 @@ class HotwordDetector(object):
         logger.debug("detecting...")
 
         state = "PASSIVE"
-        while self._running is True:
+        while self._running is True: # 여기부터 대기 시작
             if interrupt_check():
                 logger.debug("detect voice break")
                 break
             data = self.ring_buffer.get()
+
             if len(data) == 0:
                 time.sleep(sleep_time)
                 continue
 
-            status = self.detector.RunDetection(data)
+            status = self.detector.RunDetection(data) # 음성데이터를 인자로 넣음
             if status == -1:
                 logger.warning("Error initializing streams or reading audio data")
 
@@ -222,7 +229,7 @@ class HotwordDetector(object):
 
                     if audio_recorder_callback is not None:
                         state = "ACTIVE"
-                    continue
+                    sys.exit() # 수정한 부분
 
             elif state == "ACTIVE":
                 stopRecording = False
