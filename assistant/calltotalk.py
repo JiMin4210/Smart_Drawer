@@ -65,8 +65,66 @@ g.setmode(g.BCM)
 g.setup(26, g.OUT)
 #---------------------------------------------------
 from gtts import gTTS
+#-----------------물건 list 함수---------------------
+def list_update():
+    global things
+    try:
+        f = open('list.txt','r',encoding='UTF8')
+    except IOError:
+        f = open("list.txt", 'w', encoding='UTF8')
+        f.close() # list.txt 파일이 없는경우 파일을 생성해준다.
+
+    else:
+        buf = f.read().split('\n')
+        things = {}
+
+        for n in buf:
+            if(len(n)): # null인 배열 요소 방지하기 위한것
+                n = n.split()
+                things[n[0]] = n[1]
+        print(things,end='\n\n')
+    return
+
+def list_add(name,num): # 키가 같다면 내용만 바뀌게 된다.
+    #name = input("추가/변경 물건 이름 입력 : ")
+    #num = int(input("위치 입력(1~12) : "))
+    if num > 12:
+        print("사물함 용량인 12보다 낮은 값을 말해주세요")
+        return
+    result = []
+    result.append(str(x[(num-1)%3]))
+    result.append(str(y[(num-1)//3]))
+    f = open("list.txt",'a',encoding='UTF8')
+    xy = ','.join(result) # xy값을 join을 통해서 문자열로 변환
+    for n in things:
+        if things[n] == xy: # 만약 같은 좌표에 물건이 존재한다면
+            print("해당 "+xy+" 좌표에는 "+n+"이(가) 존재합니다.",end='\n\n')
+            return
+    result = name + ' ' + xy + '\n' #
+    f.write(result)
+    f.close()
+    list_update()
+    return
+
+def list_delete(name):
+    global things
+    #name = input("제거 물건 이름 입력 : ")
+    if name in things:
+        del things[name]
+        f = open('list.txt','w',encoding='UTF8')
+        for n in things:
+            f.write(n + ' '+things[n] + '\n')
+        f.close()
+        list_update()
+    else:
+        print("그런 물건 없습니다")
+
+x = [220, 100, 0]
+y = [210, 150, 60, 0]
+
+things = {}
+list_update()
 #------------------ mqtt통신------------------------
-things = {'가위': '1,2', '드라이버': '3,4'}  # 인식할 물건들
 server = "127.0.0.1"
 
 def on_connect(client, userdata, flags, rc):
