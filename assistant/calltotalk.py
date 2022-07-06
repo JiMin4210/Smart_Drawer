@@ -66,7 +66,7 @@ g.setup(26, g.OUT)
 #---------------------------------------------------
 from gtts import gTTS
 #------------------ mqtt통신------------------------
-thing = {'가위': '1,2', '드라이버': '3,4'}  # 인식할 물건들
+things = {'가위': '1,2', '드라이버': '3,4'}  # 인식할 물건들
 server = "127.0.0.1"
 
 def on_connect(client, userdata, flags, rc):
@@ -197,11 +197,11 @@ class SampleAssistant(object):
                     if "종료" in text:
                         print('프로그램 종료')
                         sys.exit()
-                    for n in thing:
+                    for n in things:
                         if n in text:
-                            print('물건 :', n, '\n좌표 :', thing[n])
-                            client.publish("xy",thing[n])
-                            tts = gTTS(text="{} 좌표는 {}입니다.".format(n,thing[n]),lang='ko')
+                            print('물건 :', n, '\n좌표 :', things[n])
+                            client.publish("xy",things[n])
+                            tts = gTTS(text="{} 좌표는 {}입니다.".format(n,things[n]),lang='ko')
                             tts.save("ans.mp3")
                             os.system("mpg321 ans.mp3&")
                             return text
