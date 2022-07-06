@@ -109,6 +109,10 @@ void loop() {
         if (client.connect("Board")) {
             Serial.println("connected");
             client.subscribe("xy");
+            display.clear();
+            display.drawString(0,0,"MQTT connection");
+            display.drawString(0,14,"Success!!");
+            display.display();
         } else {
             Serial.print("failed with state "); Serial.println(client.state());
             display.clear();
