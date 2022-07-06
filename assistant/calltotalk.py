@@ -141,7 +141,7 @@ def list_add(text): # 키가 같다면 내용만 바뀌게 된다.
                         return
                 things[name] = xy
                 for n in things:
-                f.write(n + ' '+things[n] + '\n')
+                    f.write(n + ' '+things[n] + '\n')
                 f.close()
                 list_update()
                 speech = str(num)+"번째 "+name+" 추가 완료."
