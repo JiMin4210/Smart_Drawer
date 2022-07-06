@@ -103,7 +103,7 @@ def list_update():
 
 def list_add(text): # 키가 같다면 내용만 바뀌게 된다.
     global answer_mod
-    if answer_mod:
+    if answer_mod == False:
         name = text.split()[0]
         flag = 0
         for n in range(len(recogNum)):
