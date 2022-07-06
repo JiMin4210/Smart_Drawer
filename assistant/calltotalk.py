@@ -70,7 +70,8 @@ def talk(speech):
     tts = gTTS(text=speech, lang='ko')
     tts.save("ans.mp3")
     os.system("mpg321 ans.mp3&")
-#---------------------키워드-------------------------
+    print(speech, end='\n\n')
+#---------------------------------------------------
 find = ["찾아","어디"]
 add = ["추가","등록"]
 delete = ["제거","지워","없애","삭제"]
@@ -79,6 +80,8 @@ recogNum = [["열두 번", "십이 번", "12번", "10 두 번"],["열한 번", "
             ["아홉 번", "구 번", "9번"],["여덟 번", "팔 번", "8번"],["일곱 번", "칠 번", "7번"],
             ["여섯 번", "육 번", "6번"],["다섯 번", "오 번", "5번"],["네 번", "사 번", "4번"],
             ["세 번", "삼 번", "3번"],["두 번", "이 번", "2번"],["첫 번", "일 번", "1번"]] # 12번째 인식 오류 커버
+answer_mod = False
+thing = ["name","num"] # 대답모드를 위한 버퍼
 #-----------------물건 list 함수---------------------
 def list_update():
     global things
@@ -96,44 +99,55 @@ def list_update():
             if(len(n)): # null인 배열 요소 방지하기 위한것
                 n = n.split()
                 things[n[0]] = n[1]
-        print(things,end='\n\n')
     return
 
 def list_add(text): # 키가 같다면 내용만 바뀌게 된다.
-    name = text.split()[0]
-    flag = 0
-    for n in range(len(recogNum)):
-        for i in recogNum[n]:
-            if i in text:
-                num = len(recogNum) - n
-                flag = 1 # 2중 for문을 빠져나가기 위한것
-        if flag == 1:
-            break
+    global answer_mod
+    if answer_mod:
+        name = text.split()[0]
+        flag = 0
+        for n in range(len(recogNum)):
+            for i in recogNum[n]:
+                if i in text:
+                    num = len(recogNum) - n
+                    flag = 1 # 숫자 인식이 됐다는 의미
+                    speech = "물건은 {}이며 {} 번째 서랍 등록 맞나요?".format(name,num)
+                    talk(speech)
+                    answer_mod = True
+                    thing[0] = name
+                    thing[1] = num
+                    return
 
-    if flag == 0:
-        speech = "서랍 용량보다 크거나 원하시는 위치를 인식할 수 없습니다."
-        talk(speech)
-        print(speech, end='\n\n')
-        return
-    result = []
-    result.append(str(x[(num-1)%3]))
-    result.append(str(y[(num-1)//3]))
-    f = open("list.txt",'a',encoding='UTF8')
-    xy = ','.join(result) # xy값을 join을 통해서 문자열로 변환
-    for n in things:
-        if things[n] == xy: # 만약 같은 좌표에 물건이 존재한다면
-            speech = "해당 "+xy+" 좌표에는 "+n+"이(가) 존재합니다."
+        if flag == 0:
+            speech = "서랍 용량보다 크거나 원하시는 위치를 인식할 수 없습니다."
             talk(speech)
-            print(speech, end='\n\n')
             return
-    result = name + ' ' + xy + '\n' #
-    f.write(result)
-    f.close()
-    list_update()
-    speech = str(num)+"번째 "+name+" 추가 완료."
-    talk(speech)
-    print(speech, end='\n\n')
-    return
+    else:
+        answer_mod = False
+        for n in answer:
+            if n in text:
+                name = thing[0]
+                num = thing[1]
+                result = []
+                result.append(str(x[(num-1)%3]))
+                result.append(str(y[(num-1)//3]))
+                f = open("list.txt",'a',encoding='UTF8')
+                xy = ','.join(result) # xy값을 join을 통해서 문자열로 변환
+                for n in things:
+                    if things[n] == xy: # 만약 같은 좌표에 물건이 존재한다면
+                        speech = "해당 "+xy+" 좌표에는 "+n+"이(가) 존재합니다."
+                        talk(speech)
+                        return
+                result = name + ' ' + xy + '\n' #
+                f.write(result)
+                f.close()
+                list_update()
+                speech = str(num)+"번째 "+name+" 추가 완료."
+                talk(speech)
+                return
+        speech = "긍정적 대답이 없으므로 등록을 취소합니다."
+        talk(speech)
+        return
 
 def list_delete(name):
     global things
@@ -147,11 +161,9 @@ def list_delete(name):
         list_update()
         speech = name+" 제거 완료."
         talk(speech)
-        print(speech, end='\n\n')
     else:
        speech=name + " 물건은 없습니다."
        talk(speech)
-       print(speech, end='\n\n')
 
 def list_find(name): # text 전체를 볼것인지 맨 처음 단어만 볼것인지 고민
     global things
@@ -159,12 +171,11 @@ def list_find(name): # text 전체를 볼것인지 맨 처음 단어만 볼것�
         print('물건 :', name, '\n좌표 :', things[name])
         client.publish("xy", things[name])
         speech = "{} 좌표는 {}입니다.".format(name, things[name])
-        print(speech, end='\n\n')
         talk(speech)
     else:
         speech = name + " 물건은 없습니다."
         talk(speech)
-        print(speech, end='\n\n')
+
 
 x = [220, 100, 0]
 y = [210, 150, 60, 0]
@@ -300,15 +311,20 @@ class SampleAssistant(object):
                     if "종료" in text:
                         print('프로그램 종료')
                         sys.exit()
+                        
+                    if answer_mod: # 추가에 대한 응답모드
+                        list_add(text)
+                        return
+
                     for keyword in find:
                         if keyword in text:
                             list_find(text.split()[0])
-                            return text
+                            return
 
                     for keyword in add:
                         if keyword in text:
                             list_add(text)
-                            return text
+                            return
 
                     for keyword in delete:
                         if keyword in text:
