@@ -105,7 +105,7 @@ def list_add(text): # 키가 같다면 내용만 바뀌게 된다.
     for n in range(len(recogNum)):
         for i in recogNum[n]:
             if i in text:
-                num = n+1
+                num = len(recogNum) - n
                 flag = 1 # 2중 for문을 빠져나가기 위한것
         if flag == 1:
             break
