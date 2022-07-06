@@ -125,8 +125,9 @@ void loop() {
 
 void callback(char* topic, byte* payload, unsigned int length) {
     char buf[512];
-    byte2buff(buf,payload,length); // 길이대로 안하게되면 그 주솟값에 이전 자료들이 남아있어 이상한값이 나오게되기에 길이를 인자로 넣어준다.
-    Serial.print("Message arrived in topic: ");
+    byte2buff(buf,payload,length); // 길이대로 안하게되면 그 주솟값에 이전 자료들이 남아있어 이상한값이 나오게되기에 길이를 인자로 넣어준다.\
+                                   // byte2buff 헤더파일 수정해줘야함 문자에 /n이 들어가도록
+    Serial.print("Message arrived in topic: "); 
     Serial.println(topic);
     Serial.print("Message:");
     Serial.println(buf);
