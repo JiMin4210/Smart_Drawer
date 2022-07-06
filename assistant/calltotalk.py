@@ -103,6 +103,7 @@ def list_update():
 
 def list_add(text): # 키가 같다면 내용만 바뀌게 된다.
     global answer_mod
+    global things
     if answer_mod == False:
         name = text.split()[0]
         flag = 0
@@ -131,15 +132,16 @@ def list_add(text): # 키가 같다면 내용만 바뀌게 된다.
                 result = []
                 result.append(str(x[(num-1)%3]))
                 result.append(str(y[(num-1)//3]))
-                f = open("list.txt",'a',encoding='UTF8')
+                f = open("list.txt",'w',encoding='UTF8')
                 xy = ','.join(result) # xy값을 join을 통해서 문자열로 변환
                 for n in things:
                     if things[n] == xy: # 만약 같은 좌표에 물건이 존재한다면
-                        speech = "해당 "+xy+" 좌표에는 "+n+" 물건이 존재합니다."
+                        speech = "해당 위치에는 "+n+" 물건이 존재합니다."
                         talk(speech)
                         return
-                result = name + ' ' + xy + '\n' #
-                f.write(result)
+                things[name] = xy
+                for n in things:
+                f.write(n + ' '+things[n] + '\n')
                 f.close()
                 list_update()
                 speech = str(num)+"번째 "+name+" 추가 완료."
@@ -170,7 +172,8 @@ def list_find(name): # text 전체를 볼것인지 맨 처음 단어만 볼것�
     if name in things:
         print('물건 :', name, '\n좌표 :', things[name])
         client.publish("xy", things[name])
-        speech = "{} 좌표는 {}입니다.".format(name, things[name])
+        locate = things[name].split(',')
+        speech = "{} 좌표는 {}, {}입니다.".format(name, locate[0], locate[1])
         talk(speech)
     else:
         speech = name + " 물건은 없습니다."
