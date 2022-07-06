@@ -60,6 +60,7 @@ DEFAULT_GRPC_DEADLINE = 60 * 3 + 5
 #---------------------------------------------------
 import RPi.GPIO as g
 
+g.setwarnings(False)
 g.setmode(g.BCM)
 g.setup(26, g.OUT)
 #---------------------------------------------------
