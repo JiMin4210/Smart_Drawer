@@ -15,6 +15,9 @@ SSD1306 display(0x3c, 4, 5, GEOMETRY_128_32); // oled
 WiFiClient espClient;
 PubSubClient client(espClient);
 void callback(char* topic, byte* payload, unsigned int length);
+int flag;
+int count;
+char lodding[3] = {'o','x','l'};
 
 char*               ssid_pfix = (char*)"2017146010";
 String              user_config_html = "<p><input type='text' name='mqtt'placeholder='MQTT_IP'>";      
@@ -52,22 +55,28 @@ void setup() {
     WiFi.mode(WIFI_STA);
     WiFi.begin((const char*)cfg["ssid"], (const char*)cfg["w_pw"]);
 
-    display.init();
-    display.flipScreenVertically();
-    display.setFont(ArialMT_Plain_16);
+    display.clear();
     display.drawString(0,0,(const char*)cfg["ssid"]);
-    display.drawString(0,14,"connecting"); // 연결중임을 OLED에 표시
+    display.drawString(0,14,"connecting...l"); // 연결중임을 OLED에 표시
     display.display();
 
     while (WiFi.status() != WL_CONNECTED) {
         delay(500);
         Serial.print(".");
+        display.clear();
+        display.drawString(0,0,(const char*)cfg["ssid"]);
+        display.drawString(0,14,"connecting..."+String(lodding[count++%3])); // 로딩글자 출력
+        display.display();
     }
     // main setup
     Serial.printf("\nIP address : "); Serial.println(WiFi.localIP());
 
     client.setServer((const char*)cfg["mqtt"], 1883); // cfg 데이터는 애초에 char*함수가 아닌가보다 (클래스 타입인듯?)
     client.setCallback(callback);
+
+    display.clear();
+    display.drawString(0,10,"MQTT Connect.."+String(lodding[count++%3]));
+    display.display();
 
     while (!client.connected()) {
         Serial.println("Connecting to MQTT...");
@@ -76,16 +85,17 @@ void setup() {
             client.subscribe("xy");
         } else {
             Serial.print("failed with state "); Serial.println(client.state());
-            delay(2000);
+            display.clear();
+            display.drawString(0,10,"MQTT Connect.."+String(lodding[count++%3]));
+            display.display();
+            delay(1500);
         }
     }
 
-    display.init();
-    display.flipScreenVertically();
-    display.setFont(ArialMT_Plain_16);
-    display.drawString(0,10,"MQTT Connect");
+    display.clear();
+    display.drawString(0,0,"MQTT connection");
+    display.drawString(0,14,"Success!!");
     display.display();
-    Serial.println("OLED OUTPUT IP");
 
     swSer.begin(9600);
     delay(500);
@@ -94,6 +104,19 @@ void setup() {
 
 void loop() {
     client.loop();
+    while (!client.connected()) {
+        Serial.println("Connecting to MQTT...");
+        if (client.connect("Board")) {
+            Serial.println("connected");
+            client.subscribe("xy");
+        } else {
+            Serial.print("failed with state "); Serial.println(client.state());
+            display.clear();
+            display.drawString(0,10,"MQTT Connect.."+String(lodding[count++%3]));
+            display.display();
+            delay(1500);
+        }
+    }
 }
 
 void callback(char* topic, byte* payload, unsigned int length) {
