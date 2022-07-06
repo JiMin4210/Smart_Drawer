@@ -1,4 +1,5 @@
 #profile 수정 필요
+
 ````````````````````````````````````````````````````````````````````
 #sudo vi /etc/profile
 pid=\`ps -ef | grep "run.sh" | grep -v 'grep' | awk '{print $2}'\`
