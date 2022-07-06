@@ -229,7 +229,7 @@ class HotwordDetector(object):
 
                     if audio_recorder_callback is not None:
                         state = "ACTIVE"
-                    sys.exit() # 수정한 부분
+                    return #sys.exit() # 수정한 부분
 
             elif state == "ACTIVE":
                 stopRecording = False

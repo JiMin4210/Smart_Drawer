@@ -58,6 +58,11 @@ CLOSE_MICROPHONE = embedded_assistant_pb2.DialogStateOut.CLOSE_MICROPHONE
 PLAYING = embedded_assistant_pb2.ScreenOutConfig.PLAYING
 DEFAULT_GRPC_DEADLINE = 60 * 3 + 5
 #---------------------------------------------------
+import RPi.GPIO as g
+
+g.setmode(g.BCM)
+g.setup(26, g.OUT)
+#---------------------------------------------------
 from gtts import gTTS
 #------------------ mqtt통신------------------------
 thing = {'가위': '1,2', '드라이버': '3,4'}  # 인식할 물건들
@@ -390,6 +395,7 @@ def main(api_endpoint, credentials, project_id,
     # Configure audio source and sink.
     while 1:
         print('Listening... Press Ctrl+C to exit')
+        g.output(26, g.HIGH)
 
         # main loop
         detector.start(detected_callback=snowboydecoder.play_audio_file,
@@ -516,6 +522,7 @@ def main(api_endpoint, credentials, project_id,
             # When the once flag is set, don't wait for a trigger. Otherwise, wait.
             wait_for_user_trigger = not once
             print("음성인식 시작")
+            g.output(26, g.LOW) # LED가 꺼짐으로써 음성인식 시작
             text = assistant.assist()
             #conversation_stream.close()
 
