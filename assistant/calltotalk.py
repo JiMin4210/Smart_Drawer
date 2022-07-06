@@ -65,6 +65,20 @@ g.setmode(g.BCM)
 g.setup(26, g.OUT)
 #---------------------------------------------------
 from gtts import gTTS
+
+def talk(speech):
+    tts = gTTS(text=speech, lang='ko')
+    tts.save("ans.mp3")
+    os.system("mpg321 ans.mp3&")
+#---------------------키워드-------------------------
+find = ["찾아","어디"]
+add = ["추가","등록"]
+delete = ["제거","지워","없애"]
+answer = ["네","맞아","맞어","맞다","응","어","맞습","정확"]
+recogNum = [["첫 번","일 번","1번"],["두 번","이 번","2번"],["세 번","삼 번","3번"]
+            ["네 번","사 번","4번"],["다섯 번","오 번","5번"],["여섯 번","육 번","6번"]
+            ["일곱 번","칠 번","7번"],["여덟 번","팔 번","8번"],["아홉 번","구 번","9번"]
+            ["열 번","십 번","10번"],["열한 번","십일 번","11번"],["열두 번","십이 번","12번"]]
 #-----------------물건 list 함수---------------------
 def list_update():
     global things
@@ -85,11 +99,21 @@ def list_update():
         print(things,end='\n\n')
     return
 
-def list_add(name,num): # 키가 같다면 내용만 바뀌게 된다.
-    #name = input("추가/변경 물건 이름 입력 : ")
-    #num = int(input("위치 입력(1~12) : "))
-    if num > 12:
-        print("사물함 용량인 12보다 낮은 값을 말해주세요")
+def list_add(text): # 키가 같다면 내용만 바뀌게 된다.
+    name = text.split()[0]
+    flag = 0
+    for n in range(len(recogNum)):
+        for i in recogNum[n]:
+            if i in text:
+                num = n
+                flag = 1 # 2중 for문을 빠져나가기 위한것
+        if flag == 1:
+            break
+
+    if flag == 0:
+        speech = "서랍 용량보다 크거나 원하시는 위치를 인식할 수 없습니다."
+        talk(speech)
+        print(speech, end='\n\n')
         return
     result = []
     result.append(str(x[(num-1)%3]))
@@ -98,12 +122,17 @@ def list_add(name,num): # 키가 같다면 내용만 바뀌게 된다.
     xy = ','.join(result) # xy값을 join을 통해서 문자열로 변환
     for n in things:
         if things[n] == xy: # 만약 같은 좌표에 물건이 존재한다면
-            print("해당 "+xy+" 좌표에는 "+n+"이(가) 존재합니다.",end='\n\n')
+            speech = "해당 "+xy+" 좌표에는 "+n+"이(가) 존재합니다."
+            talk(speech)
+            print(speech, end='\n\n')
             return
     result = name + ' ' + xy + '\n' #
     f.write(result)
     f.close()
     list_update()
+    speech = str(num)+"번째 "+name+" 추가 완료."
+    talk(speech)
+    print(speech, end='\n\n')
     return
 
 def list_delete(name):
@@ -116,8 +145,26 @@ def list_delete(name):
             f.write(n + ' '+things[n] + '\n')
         f.close()
         list_update()
+        speech = name+" 제거 완료."
+        talk(speech)
+        print(speech, end='\n\n')
     else:
-        print("그런 물건 없습니다")
+       speech=name + " 물건은 없습니다."
+       talk(speech)
+       print(speech, end='\n\n')
+
+def list_find(name): # text 전체를 볼것인지 맨 처음 단어만 볼것인지 고민
+    global things
+    if name in things:
+        print('물건 :', name, '\n좌표 :', things[name])
+        client.publish("xy", things[name])
+        speech = "{} 좌표는 {}입니다.".format(name, things[name])
+        print(speech, end='\n\n')
+        talk(speech)
+    else:
+        speech = name + " 물건은 없습니다."
+        talk(speech)
+        print(speech, end='\n\n')
 
 x = [220, 100, 0]
 y = [210, 150, 60, 0]
@@ -157,7 +204,6 @@ detector = snowboydecoder.HotwordDetector("resources/models/jarvis.umdl",sensiti
 
 class SampleAssistant(object):
     """Sample Assistant that supports conversations and device actions.
-
     Args:
       device_model_id: identifier of the device model.
       device_id: identifier of the registered device instance.
@@ -215,7 +261,6 @@ class SampleAssistant(object):
            retry=retry_if_exception(is_grpc_error_unavailable))
     def assist(self):
         """Send a voice request to the Assistant and playback the response.
-
         Returns: True if conversation should continue.
         """
         continue_conversation = False
@@ -255,20 +300,21 @@ class SampleAssistant(object):
                     if "종료" in text:
                         print('프로그램 종료')
                         sys.exit()
-                    for n in things:
-                        if n in text:
-                            print('물건 :', n, '\n좌표 :', things[n])
-                            client.publish("xy",things[n])
-                            tts = gTTS(text="{} 좌표는 {}입니다.".format(n,things[n]),lang='ko')
-                            tts.save("ans.mp3")
-                            os.system("mpg321 ans.mp3&")
+                    for keyword in find:
+                        if keyword in text:
+                            list_find(text.split()[0])
                             return text
-                    print('원하시는 물건을 찾지 못했어요')
-                    tts = gTTS(text="그런 물건은 없습니다.", lang='ko')
-                    tts.save("ans.mp3")
-                    os.system("mpg321 ans.mp3&")
-                    return text
-                #self.conversation_stream.write(resp.audio_out.audio_data)
+
+                    for keyword in add:
+                        if keyword in text:
+                            list_add(text)
+                            return text
+
+                    for keyword in delete:
+                        if keyword in text:
+                            list_delete(text.split()[0])
+                            return
+                self.conversation_stream.write(resp.audio_out.audio_data)
             if resp.dialog_state_out.conversation_state:
                 conversation_state = resp.dialog_state_out.conversation_state
                 logging.debug('Updating conversation state.')
@@ -416,18 +462,12 @@ def main(api_endpoint, credentials, project_id,
          audio_iter_size, audio_block_size, audio_flush_size,
          grpc_deadline, once, *args, **kwargs):
     """Samples for the Google Assistant API.
-
     Examples:
       Run the sample with microphone input and speaker output:
-
         $ python -m googlesamples.assistant
-
       Run the sample with file input and speaker output:
-
         $ python -m googlesamples.assistant -i <input file>
-
       Run the sample with file input and output:
-
         $ python -m googlesamples.assistant -i <input file> -o <output file>
     """
     # Setup logging.
