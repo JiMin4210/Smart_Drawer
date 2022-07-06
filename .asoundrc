@@ -1,0 +1,28 @@
+#vi /home/pi .asoundrc
+
+pcm.!default {
+  type asym
+  playback.pcm {
+    type plug
+    slave.pcm "output"
+  }
+  capture.pcm {
+    type plug
+    slave.pcm "input"
+  }
+}
+
+pcm.output {
+  type hw
+  card 0
+}
+
+pcm.input {
+  type hw
+  card Device
+}
+
+ctl.!default {
+  type hw
+  card 0
+}
