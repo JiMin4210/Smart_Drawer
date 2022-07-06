@@ -521,7 +521,7 @@ def main(api_endpoint, credentials, project_id,
             # and playing back assistant response using the speaker.
             # When the once flag is set, don't wait for a trigger. Otherwise, wait.
             wait_for_user_trigger = not once
-            os.system("aplay resource/ding.wav &") # 딩동 소리 시점 바꿈 (스노우보이 디코더 수정)
+            os.system("aplay resources/ding.wav &") # 딩동 소리 시점 바꿈 (스노우보이 디코더 수정)
             print("음성인식 시작")
             g.output(26, g.LOW) # LED가 꺼짐으로써 음성인식 시작
             text = assistant.assist()
