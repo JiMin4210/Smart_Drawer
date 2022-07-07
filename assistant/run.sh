@@ -6,4 +6,8 @@ while [ 1 ]
         amixer -c Device cset numid=3 14
         ~/venv/bin/python calltotalk.py &
         fi
+        bt=`hcitool con | grep D4:F5 | awk '{print $2}'`
+        if [ -z $bt ]; then
+        echo -e "connect D4:F5:47:97:C8:CB \nquit" | bluetoothctl
+        fi
    done
