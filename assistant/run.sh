@@ -9,6 +9,6 @@ while [ 1 ]
         bt=`hcitool con | grep D4:F5 | awk '{print $2}'`
         if [ -z $bt ]; then
         echo -e "connect D4:F5:47:97:C8:CB \nquit" | bluetoothctl
-        sleep .5 &
+        sleep .5
         fi
    done
