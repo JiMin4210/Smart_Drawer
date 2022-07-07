@@ -69,7 +69,7 @@ from gtts import gTTS
 def talk(speech):
     tts = gTTS(text=speech, lang='ko')
     tts.save("ans.mp3")
-    os.system("mpg321 ans.mp3&")
+    os.system("mpg321 ans.mp3")
     print(speech, end='\n\n')
 #---------------------------------------------------
 find = ["찾아","어디"]
