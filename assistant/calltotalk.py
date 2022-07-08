@@ -172,7 +172,7 @@ def list_find(name): # text 전체를 볼것인지 맨 처음 단어만 볼것�
     global things
     if name in things:
         print('물건 :', name, '\n좌표 :', things[name])
-        client.publish("xy", things[name])
+        print(client.publish("xy", things[name]))
         locate = things[name].split(',')
         speech = "{} 좌표는 {}, {}입니다.".format(name, locate[0], locate[1])
         talk(speech)
@@ -195,6 +195,8 @@ def on_connect(client, userdata, flags, rc):
 client = mqtt.Client()
 client.connect(server, 1883, 60)
 client.on_connect = on_connect
+
+client.loop_start()
 #---------------------------------------------------
 import snowboydecoder
 import signal
@@ -212,7 +214,7 @@ def interrupt_callback():
     return interrupted
 
 signal.signal(signal.SIGINT, signal_handler)
-detector = snowboydecoder.HotwordDetector("resources/models/jarvis.umdl",sensitivity=[0.9,0.90], audio_gain=5,apply_frontend=True)
+detector = snowboydecoder.HotwordDetector("resources/models/jarvis.umdl",sensitivity=[0.8,0.80], audio_gain=5,apply_frontend=True)
 #---------------------------------------------------
 
 
