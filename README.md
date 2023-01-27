@@ -30,7 +30,7 @@
 - 편의성을 추구하는 현대 시대의 **소비자들의 욕구를 충족** 시켜준다.
 
 ## 🔧 시스템 구조
-<img src="https://user-images.githubusercontent.com/90883534/215079668-f6da27ef-cc7c-46c3-8aed-062187f4a2dc.png" width="700" height="400"/>
+<p align="center"><img src="https://user-images.githubusercontent.com/90883534/215079668-f6da27ef-cc7c-46c3-8aed-062187f4a2dc.png" width="700" height="400"/></p>
 
 ## 🔨 사용 보드
 - **Raspberry Pi3** : 마이크 제어, 스피커 제어, MQTT 통신 서버 제어
