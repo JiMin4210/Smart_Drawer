@@ -8,10 +8,10 @@
 
 ## :movie_camera: 졸업 논문 및 동작 영상
 #### 졸업 논문
-- [음성인식 기술 기반 IoT 물품 수납함_박지건,김지민,신대혁,김지헌.pdf](https://github.com/JiMin4210/smart_drawer/files/10410340/IoT._.pdf)
+- [음성인식 기술 기반 IoT 물품 수납함.pdf](https://github.com/JiMin4210/smart_drawer/files/10410340/IoT._.pdf)
 
 #### 동작 영상
-- [Smart_Drawer 동작영상](https://youtu.be/jbE87-5AnNM)
+- [Smart_Drawer 동작영상 Youtube](https://youtu.be/jbE87-5AnNM)
 
 ## :books: 얻은 역량
 - Linux 환경에서의 프로그래밍 능력
