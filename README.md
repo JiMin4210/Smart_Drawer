@@ -16,7 +16,7 @@
 ## :books: 얻은 역량
 - Linux 환경에서의 프로그래밍 능력
 - Shell script에 대한 이해와 활용 능력
-- mpu(Raspberry pi) 활용 능력
+- MPU(Raspberry pi) 활용 능력
 - 오픈 소스 API 활용과 분석 능력
 - Docker에 대한 이해
 - Step Motor에 대한 이해
