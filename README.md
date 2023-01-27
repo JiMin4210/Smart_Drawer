@@ -13,6 +13,14 @@
 #### 동작 영상
 - [Smart_Drawer 동작영상](https://youtu.be/jbE87-5AnNM)
 
+## :books: 얻은 역량
+- Linux 환경에서의 프로그래밍 능력
+- Shell script에 대한 이해와 활용 능력
+- mpu(Raspberry pi) 활용 능력
+- 오픈 소스 API 활용과 분석 능력
+- Docker에 대한 이해
+- Step Motor에 대한 이해
+
 ## ⭐ 기능
 - 음성을 통한 물건 **등록, 삭제, 물건 위치 변경, 찾기 기능**을 수행한다.
 
