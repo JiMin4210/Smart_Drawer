@@ -39,7 +39,7 @@
 - Python : 음성인식, MQTT 통신
 - C : esp8266 보드 통신, step 모터 제어
 - Shell script : 프로그램 꺼짐 감지 후 실행, 마이크 감도 조절, Bluetooth 스피커 꺼짐 감지 후 자동 실행
-  - https://github.com/JiMin4210/smart_drawer/blob/main/assistant/run.sh
+  - [run.sh](https://github.com/JiMin4210/smart_drawer/blob/main/assistant/run.sh)
 
 
 
