@@ -27,18 +27,19 @@
 - 편의성을 추구하는 현대 시대의 **소비자들의 욕구를 충족**시켜준다.
 
 ## 시스템 구조
-<img src="https://user-images.githubusercontent.com/90883534/215079668-f6da27ef-cc7c-46c3-8aed-062187f4a2dc.png" width="200" height="400"/>
+<img src="https://user-images.githubusercontent.com/90883534/215079668-f6da27ef-cc7c-46c3-8aed-062187f4a2dc.png" width="600" height="400"/>
 
 ## 사용 기술
 - Docker : MQTT 서버 제작
-- Google Assistant
+- Google Assistant : 음성 인식
 - WIFI : google sever 연결, 마이크와 서랍의 공간 분리 목적
 - Bluetooth : Bluetooth 스피커 연결
 
 ## 사용 언어
 - Python : 음성인식, MQTT 통신
 - C : esp8266 보드 통신, step 모터 제어
-- Shell script : 프로그램 자동 실행, 마이크 감도 및 Bluetooth 스피커 자동연결
+- Shell script : 프로그램 꺼짐 감지 후 실행, 마이크 감도 조절, Bluetooth 스피커 꺼짐 감지 후 자동 실행
+  - https://github.com/JiMin4210/smart_drawer/blob/main/assistant/run.sh
 
 
 
