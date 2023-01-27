@@ -32,6 +32,11 @@
 ## 🔧 시스템 구조
 <img src="https://user-images.githubusercontent.com/90883534/215079668-f6da27ef-cc7c-46c3-8aed-062187f4a2dc.png" width="700" height="400"/>
 
+## 🔨 사용 보드
+- **Raspberry Pi3** : 마이크 제어, 스피커 제어, MQTT 통신 서버 제어
+- **Esp8266** : MQTT 통신
+- **Arduino Uno** : step 모터 제어
+
 ## ⚡ 사용 기술
 - **Docker** : MQTT 서버 제작
 - **Google Assistant** : 음성 인식
