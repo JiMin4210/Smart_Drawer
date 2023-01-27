@@ -19,6 +19,7 @@
 - MPU(Raspberry pi) 활용 능력
 - 오픈 소스 API 활용과 분석 능력
 - Docker에 대한 이해
+- Python virtual environment 활용 능력
 - Step Motor에 대한 이해
 
 ## ⭐ 기능
