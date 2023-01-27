@@ -1,6 +1,7 @@
 # SMART_DRAWER
 > 음성인식 기반 무선 스마트 수납함 서비스
 - 프로젝트 기간 2022.01 ~ 2022.07
+- [진행 과정 시행 착오](https://github.com/JiMin4210/smart_drawer/blob/main/%EC%A7%84%ED%96%89%20%EA%B3%BC%EC%A0%95.txt)
 
 
 ## 졸업 논문 및 동작 영상
