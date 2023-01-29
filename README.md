@@ -42,7 +42,7 @@
 <img src="https://user-images.githubusercontent.com/90883534/215079668-f6da27ef-cc7c-46c3-8aed-062187f4a2dc.png" width="700" height="400"/>
 
 ## 🔍 완성 이미지
-<img src="https://user-images.githubusercontent.com/90883534/215306986-3c4f7499-f5ca-4e05-95bf-9ec42fffcbb5.png" width="500" height="400"/>
+<img src="https://user-images.githubusercontent.com/90883534/215307085-90d6ab54-1d30-4743-ae30-1b9dfa9cc26e.pn" width="500" height="400"/>
 
 ## 🔨 사용 보드
 - **Raspberry Pi3** : 마이크 제어, 스피커 제어, MQTT 통신 서버 제어
